@@ -1,0 +1,25 @@
+name: CI/Continuous Integration Course
+
+on: push
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 18
+        cache: 'npm'
+    - run: npm ci
+    - name: Package set-up
+      run: |
+        make setup
+    - name: Run test
+      run: |
+        make lint
+    - name: Run tests
+      run: |
+        make test
