@@ -1,4 +1,4 @@
-name: CI/Continuous Integration Course
+name: CI/Continuous Integration Example
 
 on: push
 jobs:
@@ -17,9 +17,21 @@ jobs:
     - name: Package set-up
       run: |
         make setup
-    - name: Run test
+    - name: Run lint
+      needs: Package set-up
       run: |
         make lint
     - name: Run tests
+      needs: Run lint
       run: |
         make test
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high
