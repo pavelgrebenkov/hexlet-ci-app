@@ -18,14 +18,13 @@ jobs:
       run: |
         make setup
     - name: Run lint
-      needs: Package set-up
       run: |
         make lint
     - name: Run tests
-      needs: Run lint
       run: |
         make test
   security:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
